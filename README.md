@@ -19,6 +19,7 @@ option.
 
 Below is the list of features I would like to implement. This list will be updated with some new features is will find 
 interesting enough. A checkmark around a feature indicates that the feature is successfully implemented.
+
 ---
 ## **Features** 
 ### **Game Modes**
