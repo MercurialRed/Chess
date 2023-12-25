@@ -8,10 +8,31 @@ class Board:
 
     def __init__(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)]
+        self.last_move = None
 
         self._create()
         self._add_pieces('white')
         self._add_pieces('black')
+
+    def move(self, piece, move):
+        initial = move.initial
+        final = move.final
+
+        # Console board move update
+        self.squares[initial.row][initial.col].piece = None
+        self.squares[final.row][final.col].piece = piece
+
+        # Move
+        piece.moved = True
+
+        # Clear valid moves
+        piece.clear_moves()
+
+        # Set last move
+        self.last_move = move
+
+    def valid_move(self, piece, move):
+        return move in piece.moves
 
     def calc_moves(self, piece, row, col):
         """
@@ -44,7 +65,7 @@ class Board:
 
             # Diagonal moves
             possible_move_row = row + piece.direction
-            possible_move_cols = [col-1, col+1]
+            possible_move_cols = [col - 1, col + 1]
             for possible_move_col in possible_move_cols:
                 if Square.in_range(possible_move_row, possible_move_col):
                     if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
@@ -113,7 +134,8 @@ class Board:
                             break
 
                     # Not in range
-                    else: break
+                    else:
+                        break
 
                     # Incrementing incrs
                     possible_move_row = possible_move_row + row_incr
