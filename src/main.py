@@ -4,7 +4,7 @@ import sys
 from const import *
 from game import Game
 from square import Square
-from  move import Move
+from move import Move
 
 
 class Main:
@@ -87,7 +87,10 @@ class Main:
 
                         # Valid move ?
                         if board.valid_move(dragger.piece, move):
+                            captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
+                            # Sounds
+                            game.play_sound(captured)
                             # Show methods
                             game.show_bg(screen)
                             game.show_last_move(screen)
@@ -96,6 +99,20 @@ class Main:
                             game.next_turn()
 
                     dragger.undrag_piece()
+
+                # Key press
+                elif event.type == pygame.KEYDOWN:
+
+                    # Changing themes
+                    if event.key == pygame.K_t:
+                        game.change_theme()
+
+                    # Changing themes
+                    if event.key == pygame.K_r:
+                        game.reset()
+                        game = self.game
+                        board = self.game.board
+                        dragger = self.game.dragger
 
                 # Quit application
                 elif event.type == pygame.QUIT:
